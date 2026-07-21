@@ -1,5 +1,5 @@
 WITH base AS (
-    -- 1. Сесії (для підрахунку акаунтів, з'єднаних з email-розсилками)
+    -- 1. Sessions (for counting accounts connected to email newsletters)
     SELECT
         s.date AS datee,
         sp.country,
@@ -18,7 +18,7 @@ WITH base AS (
     INNER JOIN `DA.email_sent` AS es ON ac.id = es.id_account
     GROUP BY 1, 2, 3, 4, 5
     UNION ALL
-    -- 2. Метрики Email
+    -- 2. Email Metrics
     SELECT
         ss.date AS datee,
         sp.country,
@@ -39,7 +39,7 @@ WITH base AS (
     INNER JOIN `DA.session` AS ss ON sp.ga_session_id = ss.ga_session_id
     GROUP BY 1, 2, 3, 4, 5
 ),
--- Агрегування email-метрик та акаунтів за всіма вимірами
+--Aggregation of email metrics and accounts by all dimensions
 agregations AS (
     SELECT
         datee,
@@ -55,7 +55,7 @@ agregations AS (
         base
     GROUP BY 1, 2, 3, 4, 5
 ),
--- Розрахунок загальних показників по країні
+-- Calculation of general indicators by country
 totals AS (
     SELECT
         agg.datee,
@@ -72,7 +72,7 @@ totals AS (
     FROM
         agregations AS agg
 ),
--- Ранжування країн
+-- Ranking of countries
 ranks AS (
     SELECT
         *,
